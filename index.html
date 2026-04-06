@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>日数計算ツールver.MM</title>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+  body {
+    font-family: "Poppins", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    padding: 20px;
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.6;
+    background-color: #e1dfdb;
+  }
+
+  h2 {
+    font-weight: 700;
+    font-size: 36px;
+    letter-spacing: -0.04em;
+
+}
+
+  label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  input[type="date"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    background: #f5f5f4;
+  }
+
+  button {
+    display: inline-block;
+    width: auto;
+    padding: 8px 12px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 2px solid #999;
+    border-radius: 5px;
+  }
+
+  button:hover {
+    background-color: #f0f0f0;
+  }
+
+  .result {
+    margin-top: 15px;
+    font-size: 16px;
+  }
+
+  #days {
+    font-family: "Poppins", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  #days.plus {
+    color: #2e7d32;
+  }
+
+  #days.zero {
+    color: #333;
+  }
+
+  #days.minus {
+    color: #c0392b;
+  }
+
+  .errors {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .ok {
+    background: #f0fff4;
+    border: 1px solid #8fd19e;
+  }
+
+  .warn {
+    background: #fff8e1;
+    border: 1px solid #f5c542;
+  }
+
+  .danger {
+    background: #fff5f5;
+    border: 1px solid #f0c0c0;
+  }
+
+  .errors li {
+    margin-left: 20px;
+  }
+
+  @media (max-width: 600px) {
+    input[type="date"] {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h2>DAY COUNTER - VER.MM</h2>
+<p>提出日と〆切日から、余裕・遅れを確認できます</p>
+
+<label>提出日</label>
+<input type="date" id="start">
+
+<button onclick="setToday()">今日に戻す</button>
+
+<label>提出〆切日</label>
+<input type="date" id="end">
+
+<div class="result">
+  <p>日数差：<span id="days">0</span></p>
+</div>
+
+<div id="errorBox" class="errors">
+  <ul id="errors"></ul>
+</div>
+
+<script>
+const start = document.getElementById("start");
+const end = document.getElementById("end");
+const errorBox = document.getElementById("errorBox");
+
+function setToday() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+
+  start.value = `${yyyy}-${mm}-${dd}`;
+  calculateDays();
+}
+
+function calculateDays() {
+  const startDate = new Date(start.value);
+  const endDate = new Date(end.value);
+  const errors = [];
+
+  if (!start.value || !end.value) {
+    errors.push("提出日と提出〆切日を入力してください");
+  }
+
+  const ul = document.getElementById("errors");
+  ul.innerHTML = "";
+
+  if (errors.length > 0) {
+    errors.forEach(e => {
+      const li = document.createElement("li");
+      li.textContent = e;
+      ul.appendChild(li);
+    });
+
+    document.getElementById("days").textContent = "-";
+    errorBox.classList.remove("ok", "warn", "danger");
+    errorBox.classList.add("danger");
+    return;
+  }
+
+  const diffTime = endDate - startDate;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  const daysEl = document.getElementById("days");
+
+  daysEl.classList.remove("plus", "minus", "zero");
+  errorBox.classList.remove("ok", "warn", "danger");
+
+  let message = "";
+
+  if (diffDays > 0) {
+    daysEl.textContent = "✅ +" + diffDays;
+    daysEl.classList.add("plus");
+    errorBox.classList.add("ok");
+    message = "まだ余裕があります。再提出に備え行動しましょう";
+
+  } else if (diffDays < 0) {
+    daysEl.textContent = "🚨 " + diffDays;
+    daysEl.classList.add("minus");
+    errorBox.classList.add("danger");
+    message = "提出が遅れています。危機的状況です";
+
+  } else {
+    daysEl.textContent = "⚠️ 0";
+    daysEl.classList.add("zero");
+    errorBox.classList.add("warn");
+    message = "〆切当日です。再提出の可能性を考慮できていません";
+  }
+
+  const li = document.createElement("li");
+  li.textContent = message;
+  ul.appendChild(li);
+}
+
+start.addEventListener("input", calculateDays);
+end.addEventListener("input", calculateDays);
+
+window.addEventListener("load", () => {
+  setToday();
+});
+</script>
+
+</body>
+</html>
