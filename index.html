@@ -213,19 +213,19 @@ function calculateDays() {
     daysEl.textContent = "✅ +" + diffDays;
     daysEl.classList.add("plus");
     errorBox.classList.add("ok");
-    message = "まだ余裕があります。再提出に備え行動しましょう";
+    message = "まだ余裕があります。再提出を考慮した行動を";
 
   } else if (diffDays < 0) {
     daysEl.textContent = "🚨 " + diffDays;
     daysEl.classList.add("minus");
     errorBox.classList.add("danger");
-    message = "提出が遅れています。危機的状況です";
+    message = "提出が遅れています。かつてない危機";
 
   } else {
     daysEl.textContent = "⚠️ 0";
     daysEl.classList.add("zero");
     errorBox.classList.add("warn");
-    message = "〆切当日です。再提出の可能性を考慮できていません";
+    message = "〆切当日です。再提出を考慮できていません";
   }
 
   const li = document.createElement("li");
