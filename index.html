@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日数計算ツールver.MM</title>
-
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
@@ -21,11 +21,11 @@
     font-weight: 600;
     font-size: 36px;
     letter-spacing: -0.04em;
-}
+  }
   
   h2 .subtitle {
     font-size: 0.5em;
-}
+  }
 
   label {
     display: block;
@@ -66,7 +66,6 @@
   }
 
   #days {
-    font-family: "Poppins", sans-serif;
     font-size: 24px;
     font-weight: bold;
     letter-spacing: 1px;
@@ -109,16 +108,35 @@
     margin-left: 20px;
   }
 
+  /* ===== スマホ最適化 ===== */
   @media (max-width: 600px) {
+
+    body {
+      padding: 15px;
+      font-size: 16px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+
     input[type="date"] {
       max-width: 100%;
+    }
+
+    #days {
+      font-size: 28px;
+    }
+
+    button {
+      width: 100%;
     }
   }
 </style>
 </head>
 <body>
 
-<h2>DAY COUNTER<span class="subtitle"> - VER.MM</span></h2>
+<h2>DAY COUNTER<span class="subtitle"> - VER. MM</span></h2>
 <p>提出日と〆切日から、余裕・遅れを確認できます</p>
 
 <label>提出日</label>
